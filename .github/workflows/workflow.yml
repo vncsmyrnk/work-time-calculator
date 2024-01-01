@@ -23,6 +23,8 @@ jobs:
     env:
       - SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
-      - name:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: SonarCloud Analysis
         run: ./gradlew sonar -Dsonar.gradle.skipCompile=true
