@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     container: gradle:8.5.0-jdk21-alpine
     env:
-      - SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
