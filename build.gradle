@@ -33,6 +33,9 @@ testing {
 
 jacocoTestReport {
   dependsOn test
+  reports {
+    xml.required = true
+  }
 }
 
 jacocoTestCoverageVerification {
@@ -62,6 +65,7 @@ bootJar {
   dependsOn spotlessCheck
   dependsOn test
   dependsOn jacocoTestCoverageVerification
+  dependsOn jacocoTestReport
   dependsOn installLocalGitHook
   archiveFileName = 'app.jar'
 }
