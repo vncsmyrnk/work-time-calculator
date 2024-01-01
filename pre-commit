@@ -1,0 +1,18 @@
+#!/bin/bash
+
+echo "Running git pre-commit hook..."
+
+echo "Building docker image..."
+docker build --target base --tag app-image .
+
+echo "Building app..."
+docker run --rm -v "$(pwd)":/var/app app-image ./gradlew bootJar
+
+RESULT=$?
+
+if [ $RESULT -ne 0 ]; then
+  echo "Build verifications failed. Check the changes and try again"
+  exit 1
+fi
+
+exit 0

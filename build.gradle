@@ -1,0 +1,71 @@
+plugins {
+	id 'java'
+  id 'jacoco'
+	id 'org.springframework.boot' version '3.2.1'
+	id 'io.spring.dependency-management' version '1.1.4'
+  id 'nebula.lint' version '19.0.1'
+  id 'com.diffplug.spotless' version '6.23.0'
+}
+
+group = 'com.clocked'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '21'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+testing {
+  suites {
+    test {
+      useJUnitJupiter()
+    }
+  }
+}
+
+jacocoTestReport {
+  dependsOn test
+}
+
+jacocoTestCoverageVerification {
+  violationRules {
+    rule {
+      limit {
+        minimum = 0.5
+      }
+    }
+  }
+}
+
+task installLocalGitHook(type: Copy) {
+  from new File(rootProject.rootDir, 'pre-commit')
+  into { new File(rootProject.rootDir, '.git/hooks') }
+  fileMode 0775
+}
+
+spotless {
+  java {
+    endWithNewline()
+    googleJavaFormat()
+  }
+}
+
+bootJar {
+  dependsOn spotlessCheck
+  dependsOn test
+  dependsOn jacocoTestCoverageVerification
+  dependsOn installLocalGitHook
+  archiveFileName = 'app.jar'
+}
+
+allprojects {
+  apply plugin: 'nebula.lint'
+}
