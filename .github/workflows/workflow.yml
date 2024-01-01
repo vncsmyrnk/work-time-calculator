@@ -15,11 +15,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build
-        run: ./gradle bootJar
+        run: ./gradlew bootJar
 
   analysis:
     runs-on: ubuntu-latest
     container: gradle:8.5.0-jdk21-alpine
+    needs: build
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
