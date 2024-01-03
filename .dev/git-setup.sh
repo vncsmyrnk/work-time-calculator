@@ -9,7 +9,7 @@ if [ -z "$name" ] || [ -z "$email" ]; then
 fi
 
 echo "Installing dependecies (neovim, git, gcc)..."
-apk add git openssh-keygen
+apk add git openssh-keygen openssh-client
 
 git config --global user.name $name
 git config --global user.email $email
