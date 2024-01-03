@@ -2,11 +2,13 @@
 
 echo "Running git pre-commit hook..."
 
-echo "Building docker image..."
-docker build --target base --tag app-image .
-
 echo "Building app..."
-docker run --rm -v "$(pwd)":/var/app app-image ./gradlew bootJar
+./gradlew bootJar
+
+# For building in the host
+# echo "Building docker image..."
+# docker build --target base --tag wtc-image .
+# docker run --rm -v "$(pwd)":/var/app wtc-image ./gradlew bootJar
 
 RESULT=$?
 

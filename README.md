@@ -22,6 +22,9 @@ docker run -it --name wtc-app -v "$(pwd)":/var/app -p 8080:8080 wtc-image bash
 
 # To run it again
 docker start wtc-app
+
+# To access it on terminal
+docker exec -it wtc bash
 ```
 
 To use [nvim](https://neovim.io/) inside the container for development of features, just run `.dev/nvim-setup.sh`. It will install and configure nvim and other dependencies.
