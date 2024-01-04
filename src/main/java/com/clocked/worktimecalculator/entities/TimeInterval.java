@@ -28,7 +28,7 @@ public class TimeInterval {
   }
 
   public double durationInHours() {
-    return durationInSeconds() / (60 * 60);
+    return (double) durationInSeconds() / (60 * 60);
   }
 
   public TimeIntervalType type() {
