@@ -3,7 +3,7 @@
 echo "Running git pre-commit hook..."
 
 echo "Building app..."
-./gradlew bootJar
+./gradlew clean bootJar
 
 # For building in the host
 # echo "Building docker image..."

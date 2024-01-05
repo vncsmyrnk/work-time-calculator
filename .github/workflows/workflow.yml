@@ -14,6 +14,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Scan Tests
+        run: ./gradlew test --scan
+
       - name: Build
         run: ./gradlew bootJar
 

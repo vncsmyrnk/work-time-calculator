@@ -5,13 +5,23 @@ import java.time.temporal.ChronoUnit;
 public class TimeInterval {
   private TimeRecord initialRecord;
   private TimeRecord endRecord;
+  private boolean previousRegisteredRecordWasInDirected;
 
-  public TimeInterval(TimeRecord initialRecord, TimeRecord endRecord) throws Exception {
-    if (endRecord.getDateTime().isBefore(initialRecord.getDateTime())) {
-      throw new Exception();
+  public TimeInterval(TimeRecord initialRecord, TimeRecord endRecord) {
+    if (areRecordsValid(initialRecord, endRecord)) {
+      throw new IllegalArgumentException("Initial date should be greater than the final");
     }
     this.endRecord = endRecord;
     this.initialRecord = initialRecord;
+    this.previousRegisteredRecordWasInDirected = false;
+  }
+
+  public TimeInterval(
+      TimeRecord initialRecord,
+      TimeRecord endRecord,
+      boolean previousRegisteredRecordWasInDirected) {
+    this(initialRecord, endRecord);
+    this.previousRegisteredRecordWasInDirected = previousRegisteredRecordWasInDirected;
   }
 
   public TimeRecord getInitialRecord() {
@@ -23,19 +33,14 @@ public class TimeInterval {
   }
 
   public double durationInSeconds() {
-    return (double)
-        ChronoUnit.SECONDS.between(initialRecord.getDateTime(), endRecord.getDateTime());
+    return ChronoUnit.SECONDS.between(initialRecord.getDateTime(), endRecord.getDateTime());
   }
 
   public double durationInHours() {
-    return (double) durationInSeconds() / (60 * 60);
+    return durationInSeconds() / (60 * 60);
   }
 
   public TimeIntervalType type() {
-    return type(false);
-  }
-
-  public TimeIntervalType type(boolean previousRegisteredRecordWasInDirected) {
     if (durationInSeconds() == 0) {
       return TimeIntervalType.NO_TIME;
     }
@@ -46,47 +51,35 @@ public class TimeInterval {
     TimeRecordType endRecordType = endRecord.getType();
     TimeRecordDirection endRecordDirection = endRecord.getDirection();
 
-    // if the initial record is registered in by the worker then the whole interval
-    // is a work interval
-    if (initialRecordType == TimeRecordType.REGISTERED
-        && initialRecordDirection == TimeRecordDirection.IN) {
-      return TimeIntervalType.WORK;
+    if (initialRecordType == TimeRecordType.REGISTERED) {
+      // if the initial record is registered in by the worker then the whole interval
+      // is a work interval
+      if (initialRecordDirection == TimeRecordDirection.IN) {
+        return TimeIntervalType.WORK;
+      }
     }
 
-    // if the end record is registered out by the worker then the whole interval
-    // is a work interval
-    if (endRecordType == TimeRecordType.REGISTERED
-        && endRecordDirection == TimeRecordDirection.OUT) {
-      return TimeIntervalType.WORK;
+    if (endRecordType == TimeRecordType.REGISTERED) {
+      // if the end record is registered out by the worker then the whole interval
+      // is a work interval
+      if (endRecordDirection == TimeRecordDirection.OUT) {
+        return TimeIntervalType.WORK;
+      }
     }
 
-    // if the initial record is registered out by the worker then the whole interval
-    // is a work interval
-    if (initialRecordType == TimeRecordType.REGISTERED
-        && initialRecordDirection == TimeRecordDirection.OUT) {
-      return TimeIntervalType.ABSENT;
-    }
-
-    // if the end record is registered in by the worker then the whole interval
-    // is a absent interval
-    if (endRecordType == TimeRecordType.REGISTERED
-        && endRecordDirection == TimeRecordDirection.IN) {
-      return TimeIntervalType.ABSENT;
-    }
-
-    // if the the interval begins and ends with shift records it may be a work interval
-    // only if there are any work record before the current interval
-    if ((initialRecordType == TimeRecordType.SHIFT
-            && initialRecordDirection == TimeRecordDirection.IN)
-        && (endRecordType == TimeRecordType.SHIFT
-            && endRecordDirection == TimeRecordDirection.OUT)) {
+    if (initialRecordType == TimeRecordType.SHIFT && endRecordType == TimeRecordType.SHIFT) {
+      // if the interval begins and ends with shift records it may be a work interval
+      // only if there are any work record before the current interval
       if (previousRegisteredRecordWasInDirected) {
         return TimeIntervalType.WORK;
       }
-      return TimeIntervalType.ABSENT;
     }
 
-    // Default return
+    // Determine absence when work is not detected
     return TimeIntervalType.ABSENT;
+  }
+
+  private boolean areRecordsValid(TimeRecord initialRecord, TimeRecord endRecord) {
+    return endRecord.getDateTime().isBefore(initialRecord.getDateTime());
   }
 }

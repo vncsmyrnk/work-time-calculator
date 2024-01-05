@@ -1,42 +1,57 @@
 package com.clocked.worktimecalculator.entities;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Day {
-  private LocalDateTime date;
-  private ArrayList<Calculation> calculations;
-  private ArrayList<TimeInterval> timeIntervals;
+  private LocalDate date;
+  private List<Calculation> calculations;
+  private List<TimeInterval> timeIntervals;
 
-  public Day(LocalDateTime date, ArrayList<TimeInterval> timeIntervals) {
+  public Day(LocalDate date, List<TimeInterval> timeIntervals) {
     this.date = date;
     this.calculations = new ArrayList<>();
     this.timeIntervals = timeIntervals;
   }
 
-  public ArrayList<Calculation> calculate() {
-    calculateWorkTime();
-    calculateAbsentTime();
+  public List<Calculation> calculate() {
+    calculateHoursWorkTime();
+    calculateHoursAbsentTime();
     return calculations;
   }
 
-  public LocalDateTime getDate() {
+  public LocalDate getDate() {
     return date;
   }
 
-  public ArrayList<Calculation> getCalculations() {
+  public List<Calculation> getCalculations() {
     return calculations;
   }
 
-  public ArrayList<TimeInterval> getTimeIntervals() {
+  public List<TimeInterval> getTimeIntervals() {
     return timeIntervals;
   }
 
-  private void calculateWorkTime() {
-    this.calculations.add(new Calculation(CalculationType.WORK, 8));
+  public Calculation getCalculation(CalculationType type) {
+    return calculations.stream().filter(c -> c.getType() == type).findFirst().get();
   }
 
-  private void calculateAbsentTime() {
-    this.calculations.add(new Calculation(CalculationType.ABSENT, 0));
+  private void calculateHoursWorkTime() {
+    double workTime =
+        timeIntervals.stream()
+            .filter(t -> t.type() == TimeIntervalType.WORK)
+            .mapToDouble(TimeInterval::durationInHours)
+            .sum();
+    this.calculations.add(new Calculation(CalculationType.WORK, workTime));
+  }
+
+  private void calculateHoursAbsentTime() {
+    double absentTime =
+        timeIntervals.stream()
+            .filter(t -> t.type() == TimeIntervalType.ABSENT)
+            .mapToDouble(TimeInterval::durationInHours)
+            .sum();
+    this.calculations.add(new Calculation(CalculationType.ABSENT, absentTime));
   }
 }
