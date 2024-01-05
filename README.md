@@ -1,5 +1,14 @@
 # Work Time Calculator
 
+<img src="https://img.shields.io/badge/Spring_Boot-F2F4F9?style=for-the-badge&logo=spring-boot" />
+<img src="https://img.shields.io/badge/Github%20Actions-282a2e?style=for-the-badge&logo=githubactions&logoColor=367cfe" />
+<br>
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.clocked%3Awork-time-calculator&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=com.clocked%3Awork-time-calculator)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=com.clocked%3Awork-time-calculator&metric=coverage)](https://sonarcloud.io/summary/new_code?id=com.clocked%3Awork-time-calculator)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=com.clocked%3Awork-time-calculator&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=com.clocked%3Awork-time-calculator)
+<br>
+<br>
+
 This is an app built with Spring Boot and Gradle to calculate work time for a given parameter inputs.
 
 Docker is used to handle the environments.
