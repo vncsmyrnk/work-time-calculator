@@ -51,28 +51,26 @@ public class TimeInterval {
     TimeRecordType endRecordType = endRecord.getType();
     TimeRecordDirection endRecordDirection = endRecord.getDirection();
 
-    if (initialRecordType == TimeRecordType.REGISTERED) {
-      // if the initial record is registered in by the worker then the whole interval
-      // is a work interval
-      if (initialRecordDirection == TimeRecordDirection.IN) {
-        return TimeIntervalType.WORK;
-      }
+    // if the initial record is registered in by the worker then the whole interval
+    // is a work interval
+    if (initialRecordType == TimeRecordType.REGISTERED
+        && initialRecordDirection == TimeRecordDirection.IN) {
+      return TimeIntervalType.WORK;
     }
 
-    if (endRecordType == TimeRecordType.REGISTERED) {
-      // if the end record is registered out by the worker then the whole interval
-      // is a work interval
-      if (endRecordDirection == TimeRecordDirection.OUT) {
-        return TimeIntervalType.WORK;
-      }
+    // if the end record is registered out by the worker then the whole interval
+    // is a work interval
+    if (endRecordType == TimeRecordType.REGISTERED
+        && endRecordDirection == TimeRecordDirection.OUT) {
+      return TimeIntervalType.WORK;
     }
 
-    if (initialRecordType == TimeRecordType.SHIFT && endRecordType == TimeRecordType.SHIFT) {
-      // if the interval begins and ends with shift records it may be a work interval
-      // only if there are any work record before the current interval
-      if (previousRegisteredRecordWasInDirected) {
-        return TimeIntervalType.WORK;
-      }
+    // if the interval begins and ends with shift records it may be a work interval
+    // only if there are any work record before the current interval
+    if (initialRecordType == TimeRecordType.SHIFT
+        && endRecordType == TimeRecordType.SHIFT
+        && previousRegisteredRecordWasInDirected) {
+      return TimeIntervalType.WORK;
     }
 
     // Determine absence when work is not detected

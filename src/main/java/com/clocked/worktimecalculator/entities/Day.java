@@ -34,7 +34,7 @@ public class Day {
   }
 
   public Calculation getCalculation(CalculationType type) {
-    return calculations.stream().filter(c -> c.getType() == type).findFirst().get();
+    return calculations.stream().filter(c -> c.getType() == type).findFirst().orElse(null);
   }
 
   private void calculateHoursWorkTime() {

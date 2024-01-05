@@ -23,20 +23,16 @@ class TimeIntervalTest {
 
   @Test
   void testCreateTimeIntervalException() {
+    TimeRecord recordA =
+        new TimeRecord(
+            LocalDateTime.of(2023, 1, 1, 8, 0), TimeRecordType.REGISTERED, TimeRecordDirection.IN);
+    TimeRecord recordB =
+        new TimeRecord(
+            LocalDateTime.of(2023, 1, 1, 9, 0), TimeRecordType.REGISTERED, TimeRecordDirection.OUT);
+
     assertThrows(
         IllegalArgumentException.class,
         () -> {
-          TimeRecord recordA =
-              new TimeRecord(
-                  LocalDateTime.of(2023, 1, 1, 8, 0),
-                  TimeRecordType.REGISTERED,
-                  TimeRecordDirection.IN);
-          TimeRecord recordB =
-              new TimeRecord(
-                  LocalDateTime.of(2023, 1, 1, 9, 0),
-                  TimeRecordType.REGISTERED,
-                  TimeRecordDirection.OUT);
-
           new TimeInterval(recordB, recordA);
         });
   }
