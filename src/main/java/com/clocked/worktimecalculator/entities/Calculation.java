@@ -1,5 +1,7 @@
 package com.clocked.worktimecalculator.entities;
 
+import java.util.Objects;
+
 public class Calculation {
   private CalculationType type;
   private double value;
@@ -15,5 +17,16 @@ public class Calculation {
 
   public double getValue() {
     return this.value;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    Calculation otherCalculation = (Calculation) obj;
+    return type.equals(otherCalculation.getType()) && value == otherCalculation.getValue();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(type, value);
   }
 }

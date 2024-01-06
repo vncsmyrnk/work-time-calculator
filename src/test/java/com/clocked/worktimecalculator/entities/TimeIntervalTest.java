@@ -1,9 +1,12 @@
 package com.clocked.worktimecalculator.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import org.junit.jupiter.api.Test;
 
 class TimeIntervalTest {
@@ -172,5 +175,68 @@ class TimeIntervalTest {
     TimeInterval timeInterval3 = new TimeInterval(recordShiftB, recordB);
     assertEquals(15.0 / 60.0, timeInterval3.durationInHours());
     assertEquals(TimeIntervalType.WORK, timeInterval3.type());
+  }
+
+  @Test
+  void testTimeIntervalEquals() {
+    TimeInterval timeIntervalA =
+        new TimeInterval(
+            new TimeRecord(
+                LocalDateTime.of(2023, 1, 1, 8, 0),
+                TimeRecordType.REGISTERED,
+                TimeRecordDirection.IN),
+            new TimeRecord(
+                LocalDateTime.of(2023, 1, 1, 9, 0),
+                TimeRecordType.REGISTERED,
+                TimeRecordDirection.OUT));
+    TimeInterval timeIntervalB =
+        new TimeInterval(
+            new TimeRecord(
+                LocalDateTime.of(2023, 1, 1, 8, 0),
+                TimeRecordType.REGISTERED,
+                TimeRecordDirection.IN),
+            new TimeRecord(
+                LocalDateTime.of(2023, 1, 1, 9, 0),
+                TimeRecordType.REGISTERED,
+                TimeRecordDirection.OUT));
+    assertTrue(timeIntervalA.equals(timeIntervalB));
+  }
+
+  @Test
+  void testTimeIntervalNotEquals() {
+    TimeInterval timeIntervalA =
+        new TimeInterval(
+            new TimeRecord(
+                LocalDateTime.of(2023, 1, 1, 8, 0), TimeRecordType.SHIFT, TimeRecordDirection.IN),
+            new TimeRecord(
+                LocalDateTime.of(2023, 1, 1, 10, 0),
+                TimeRecordType.REGISTERED,
+                TimeRecordDirection.IN));
+    TimeInterval timeIntervalB =
+        new TimeInterval(
+            new TimeRecord(
+                LocalDateTime.of(2023, 1, 1, 8, 0),
+                TimeRecordType.REGISTERED,
+                TimeRecordDirection.IN),
+            new TimeRecord(
+                LocalDateTime.of(2023, 1, 1, 9, 0),
+                TimeRecordType.REGISTERED,
+                TimeRecordDirection.OUT));
+    assertFalse(timeIntervalA.equals(timeIntervalB));
+  }
+
+  @Test
+  void testTimeIntervalHashCode() {
+    TimeInterval timeInterval =
+        new TimeInterval(
+            new TimeRecord(
+                LocalDateTime.of(2023, 1, 1, 8, 0), TimeRecordType.SHIFT, TimeRecordDirection.IN),
+            new TimeRecord(
+                LocalDateTime.of(2023, 1, 1, 10, 0),
+                TimeRecordType.REGISTERED,
+                TimeRecordDirection.IN));
+    assertEquals(
+        Objects.hash(timeInterval.getInitialRecord(), timeInterval.getEndRecord()),
+        timeInterval.hashCode());
   }
 }

@@ -3,6 +3,7 @@ package com.clocked.worktimecalculator.entities;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Day {
   private LocalDate date;
@@ -53,5 +54,18 @@ public class Day {
             .mapToDouble(TimeInterval::durationInHours)
             .sum();
     this.calculations.add(new Calculation(CalculationType.ABSENT, absentTime));
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    Day otherDay = (Day) obj;
+    return date.equals(otherDay.getDate())
+        && timeIntervals.equals(otherDay.getTimeIntervals())
+        && calculations.equals(otherDay.getCalculations());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(date, timeIntervals, calculations);
   }
 }

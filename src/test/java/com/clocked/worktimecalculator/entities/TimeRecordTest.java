@@ -1,8 +1,11 @@
 package com.clocked.worktimecalculator.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import org.junit.jupiter.api.Test;
 
 class TimeRecordTest {
@@ -14,5 +17,37 @@ class TimeRecordTest {
     assertEquals(dateTime, timeRecord.getDateTime());
     assertEquals(TimeRecordType.REGISTERED, timeRecord.getType());
     assertEquals(TimeRecordDirection.IN, timeRecord.getDirection());
+  }
+
+  @Test
+  void testTimeRecordEquals() {
+    TimeRecord timeRecordA =
+        new TimeRecord(
+            LocalDateTime.of(2023, 1, 1, 0, 0), TimeRecordType.REGISTERED, TimeRecordDirection.IN);
+    TimeRecord timeRecordB =
+        new TimeRecord(
+            LocalDateTime.of(2023, 1, 1, 0, 0), TimeRecordType.REGISTERED, TimeRecordDirection.IN);
+    assertTrue(timeRecordA.equals(timeRecordB));
+  }
+
+  @Test
+  void testTimeRecordNotEquals() {
+    TimeRecord timeRecordA =
+        new TimeRecord(
+            LocalDateTime.of(2023, 1, 1, 0, 0), TimeRecordType.REGISTERED, TimeRecordDirection.IN);
+    TimeRecord timeRecordB =
+        new TimeRecord(
+            LocalDateTime.of(2023, 1, 2, 0, 0), TimeRecordType.SHIFT, TimeRecordDirection.OUT);
+    assertFalse(timeRecordA.equals(timeRecordB));
+  }
+
+  @Test
+  void testTimeRecordHashCode() {
+    TimeRecord timeRecord =
+        new TimeRecord(
+            LocalDateTime.of(2023, 1, 1, 0, 0), TimeRecordType.REGISTERED, TimeRecordDirection.IN);
+    assertEquals(
+        Objects.hash(timeRecord.getDateTime(), timeRecord.getType(), timeRecord.getDirection()),
+        timeRecord.hashCode());
   }
 }

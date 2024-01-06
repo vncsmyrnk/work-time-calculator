@@ -1,6 +1,7 @@
 package com.clocked.worktimecalculator.entities;
 
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 public class TimeInterval {
   private TimeRecord initialRecord;
@@ -79,5 +80,17 @@ public class TimeInterval {
 
   private boolean areRecordsValid(TimeRecord initialRecord, TimeRecord endRecord) {
     return endRecord.getDateTime().isBefore(initialRecord.getDateTime());
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    TimeInterval otherTimeInterval = (TimeInterval) obj;
+    return initialRecord.equals(otherTimeInterval.getInitialRecord())
+        && endRecord.equals(otherTimeInterval.getEndRecord());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(initialRecord, endRecord);
   }
 }
