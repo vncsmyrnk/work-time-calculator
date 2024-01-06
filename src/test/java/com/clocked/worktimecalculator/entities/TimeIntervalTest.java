@@ -1,9 +1,8 @@
 package com.clocked.worktimecalculator.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -22,6 +21,7 @@ class TimeIntervalTest {
     TimeInterval timeInterval = new TimeInterval(recordA, recordB);
     assertEquals(recordA, timeInterval.getInitialRecord());
     assertEquals(recordB, timeInterval.getEndRecord());
+    assertEquals(false, timeInterval.getPreviousRegisteredRecordWasInDirected());
   }
 
   @Test
@@ -199,7 +199,7 @@ class TimeIntervalTest {
                 LocalDateTime.of(2023, 1, 1, 9, 0),
                 TimeRecordType.REGISTERED,
                 TimeRecordDirection.OUT));
-    assertTrue(timeIntervalA.equals(timeIntervalB));
+    assertEquals(true, timeIntervalA.equals(timeIntervalB));
   }
 
   @Test
@@ -222,7 +222,7 @@ class TimeIntervalTest {
                 LocalDateTime.of(2023, 1, 1, 9, 0),
                 TimeRecordType.REGISTERED,
                 TimeRecordDirection.OUT));
-    assertFalse(timeIntervalA.equals(timeIntervalB));
+    assertNotEquals(true, timeIntervalA.equals(timeIntervalB));
   }
 
   @Test

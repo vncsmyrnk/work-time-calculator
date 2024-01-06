@@ -38,6 +38,13 @@ public class TimeRecord implements Comparable<TimeRecord> {
 
   @Override
   public boolean equals(Object obj) {
+    if (this == obj) {
+      return true; // Reflexivity
+    }
+
+    if (obj == null || getClass() != obj.getClass()) {
+      return false; // Symmetry and null check
+    }
     TimeRecord otherTimeRecord = (TimeRecord) obj;
     return dateTime.equals(otherTimeRecord.getDateTime())
         && type == otherTimeRecord.getType()

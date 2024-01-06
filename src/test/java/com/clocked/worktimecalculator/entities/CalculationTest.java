@@ -1,8 +1,7 @@
 package com.clocked.worktimecalculator.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.Objects;
 import org.junit.jupiter.api.Test;
@@ -19,14 +18,14 @@ class CalculationTest {
   void testCalculationEquals() {
     Calculation calculationA = new Calculation(CalculationType.WORK, 8);
     Calculation calculationB = new Calculation(CalculationType.WORK, 8);
-    assertTrue(calculationA.equals(calculationB));
+    assertEquals(true, calculationA.equals(calculationB));
   }
 
   @Test
   void testCalculationNotEquals() {
     Calculation calculationA = new Calculation(CalculationType.WORK, 8);
     Calculation calculationB = new Calculation(CalculationType.ABSENT, 9);
-    assertFalse(calculationA.equals(calculationB));
+    assertNotEquals(true, calculationA.equals(calculationB));
   }
 
   @Test

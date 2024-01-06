@@ -58,6 +58,13 @@ public class Day {
 
   @Override
   public boolean equals(Object obj) {
+    if (this == obj) {
+      return true; // Reflexivity
+    }
+
+    if (obj == null || getClass() != obj.getClass()) {
+      return false; // Symmetry and null check
+    }
     Day otherDay = (Day) obj;
     return date.equals(otherDay.getDate())
         && timeIntervals.equals(otherDay.getTimeIntervals())

@@ -33,6 +33,10 @@ public class TimeInterval {
     return endRecord;
   }
 
+  public boolean getPreviousRegisteredRecordWasInDirected() {
+    return previousRegisteredRecordWasInDirected;
+  }
+
   public double durationInSeconds() {
     return ChronoUnit.SECONDS.between(initialRecord.getDateTime(), endRecord.getDateTime());
   }
@@ -84,6 +88,13 @@ public class TimeInterval {
 
   @Override
   public boolean equals(Object obj) {
+    if (this == obj) {
+      return true; // Reflexivity
+    }
+
+    if (obj == null || getClass() != obj.getClass()) {
+      return false; // Symmetry and null check
+    }
     TimeInterval otherTimeInterval = (TimeInterval) obj;
     return initialRecord.equals(otherTimeInterval.getInitialRecord())
         && endRecord.equals(otherTimeInterval.getEndRecord());

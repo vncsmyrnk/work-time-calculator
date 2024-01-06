@@ -1,8 +1,7 @@
 package com.clocked.worktimecalculator.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -81,7 +80,7 @@ class DayTest {
                             LocalDateTime.of(2023, 1, 1, 10, 0), TimeRecordType.REGISTERED)));
               }
             });
-    assertTrue(dayA.equals(dayB));
+    assertEquals(true, dayA.equals(dayB));
   }
 
   @Test
@@ -111,7 +110,7 @@ class DayTest {
                             LocalDateTime.of(2023, 1, 1, 10, 0), TimeRecordType.REGISTERED)));
               }
             });
-    assertFalse(dayA.equals(dayB));
+    assertNotEquals(true, dayA.equals(dayB));
   }
 
   @Test

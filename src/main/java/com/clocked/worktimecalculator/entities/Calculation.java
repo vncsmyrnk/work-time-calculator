@@ -21,6 +21,13 @@ public class Calculation {
 
   @Override
   public boolean equals(Object obj) {
+    if (this == obj) {
+      return true; // Reflexivity
+    }
+
+    if (obj == null || getClass() != obj.getClass()) {
+      return false; // Symmetry and null check
+    }
     Calculation otherCalculation = (Calculation) obj;
     return type.equals(otherCalculation.getType()) && value == otherCalculation.getValue();
   }

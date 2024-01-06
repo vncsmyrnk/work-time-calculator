@@ -11,10 +11,7 @@ public class TimeRecordBuilder {
 
   public static List<TimeRecord> of(List<LocalDateTime> dateTimes, TimeRecordType type) {
     List<TimeRecord> timeRecords = new ArrayList<>();
-    dateTimes.forEach(
-        dateTime -> {
-          timeRecords.add(new TimeRecord(dateTime, type));
-        });
+    dateTimes.forEach(dateTime -> timeRecords.add(new TimeRecord(dateTime, type)));
     return timeRecords;
   }
 }
