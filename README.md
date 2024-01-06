@@ -43,4 +43,4 @@ A SonarCloud action is used to check for vulnerabilities and static analysis.
 
 ## Deployment
 
-Soon enough, the docker images containing the production-ready code.
+As soon as possible releases will to be avaiable and the docker images containing the production-ready code will be deployed to dockerhub.
