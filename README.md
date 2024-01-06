@@ -40,3 +40,7 @@ To use [nvim](https://neovim.io/) inside the container for development of featur
 This project uses hooks and actions for checking new changes. A minimum code coverage metric is used to verify the changes.
 
 A SonarCloud action is used to check for vulnerabilities and static analysis.
+
+## Deployment
+
+Soon enough, the docker images containing the production-ready code.
