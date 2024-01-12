@@ -2,6 +2,7 @@ package com.clocked.worktimecalculator.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,6 +19,25 @@ class DayTest {
     Day day = new Day(date, timeIntervals);
     assertEquals(date, day.getDate());
     assertEquals(timeIntervals, day.getTimeIntervals());
+  }
+
+  @Test
+  void testCreateDayValidations() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> {
+          new Day(null, null);
+        });
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> {
+          new Day(LocalDate.of(2023, 1, 1), null);
+        });
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> {
+          new Day(null, new ArrayList<>());
+        });
   }
 
   @Test
@@ -53,6 +73,14 @@ class DayTest {
   }
 
   @Test
+  void testDayWithNoCalculations() {
+    Day day = new Day(LocalDate.of(2023, 1, 1), new ArrayList<>());
+    day.calculate();
+    assertEquals(0, day.getCalculation(CalculationType.WORK).getValue());
+    assertEquals(0, day.getCalculation(CalculationType.ABSENT).getValue());
+  }
+
+  @Test
   void testDayEquals() {
     Day dayA =
         new Day(
@@ -81,6 +109,7 @@ class DayTest {
               }
             });
     assertEquals(true, dayA.equals(dayB));
+    assertEquals(true, dayA.equals(dayA));
   }
 
   @Test
@@ -111,6 +140,8 @@ class DayTest {
               }
             });
     assertNotEquals(true, dayA.equals(dayB));
+    assertNotEquals(true, dayA.equals(LocalDate.of(2023, 1, 1)));
+    assertNotEquals(true, dayA.equals(null));
   }
 
   @Test

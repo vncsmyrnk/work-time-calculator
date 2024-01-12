@@ -25,11 +25,56 @@ public class TimeIntervalBuilder {
   }
 
   public static List<TimeInterval> of(List<TimeRecord> timeRecords) {
-    // Sort the time record list
     Collections.sort(timeRecords);
+    setTimeRecordsDirection(timeRecords);
+    return buildTimeIntervals(timeRecords);
+  }
 
-    // Define the direction of the time records
-    Iterator<TimeRecord> timeRecordIterator = timeRecords.iterator();
+  private static List<TimeInterval> buildTimeIntervals(List<TimeRecord> orderedTimeRecords) {
+    List<TimeInterval> timeIntervals = new ArrayList<>();
+    Iterator<Pair<TimeRecord, TimeRecord>> iterator = new TwoElementsIterator<>(orderedTimeRecords);
+    boolean previousRegisteredRecordWasInDirected = false;
+
+    while (iterator.hasNext()) {
+      Pair<TimeRecord, TimeRecord> dateTimePair = iterator.next();
+      timeIntervals.add(
+          new TimeInterval(
+              dateTimePair.first, dateTimePair.second, previousRegisteredRecordWasInDirected));
+
+      boolean secondDateTimeIsRegisteredAndOut =
+          dateTimePair.second.getType().isRegistered()
+              && dateTimePair.second.getDirection().isOut();
+
+      boolean firstDateTimeIsRegisteredAndOutAndSecondIsNotRegistered =
+          dateTimePair.first.getType().isRegistered()
+              && dateTimePair.first.getDirection().isOut()
+              && dateTimePair.second.getType().isNotRegistered();
+
+      if (secondDateTimeIsRegisteredAndOut
+          || firstDateTimeIsRegisteredAndOutAndSecondIsNotRegistered) {
+        previousRegisteredRecordWasInDirected = false;
+        continue;
+      }
+
+      boolean secondDateTimeIsRegisteredAndIn =
+          dateTimePair.second.getType().isRegistered() && dateTimePair.second.getDirection().isIn();
+
+      boolean firstDateTimeIsRegisteredAndInAndSecondIsNotRegistered =
+          dateTimePair.first.getType().isRegistered()
+              && dateTimePair.first.getDirection().isIn()
+              && dateTimePair.second.getType().isNotRegistered();
+
+      if (secondDateTimeIsRegisteredAndIn
+          || firstDateTimeIsRegisteredAndInAndSecondIsNotRegistered) {
+        previousRegisteredRecordWasInDirected = true;
+      }
+    }
+
+    return timeIntervals;
+  }
+
+  private static List<TimeRecord> setTimeRecordsDirection(List<TimeRecord> orderedTimeRecords) {
+    Iterator<TimeRecord> timeRecordIterator = orderedTimeRecords.iterator();
     TimeRecordDirection lastRegisteredDirection = TimeRecordDirection.OUT;
     TimeRecordDirection lastShiftDirection = TimeRecordDirection.OUT;
 
@@ -37,35 +82,16 @@ public class TimeIntervalBuilder {
       TimeRecord timeRecord = timeRecordIterator.next();
 
       if (timeRecord.getType() == TimeRecordType.REGISTERED) {
-        lastRegisteredDirection =
-            lastRegisteredDirection == TimeRecordDirection.IN
-                ? TimeRecordDirection.OUT
-                : TimeRecordDirection.IN;
-
+        lastRegisteredDirection = lastRegisteredDirection.toggle();
         timeRecord.setDirection(lastRegisteredDirection);
       }
 
       if (timeRecord.getType() == TimeRecordType.SHIFT) {
-        lastShiftDirection =
-            lastShiftDirection == TimeRecordDirection.IN
-                ? TimeRecordDirection.OUT
-                : TimeRecordDirection.IN;
-
+        lastShiftDirection = lastShiftDirection.toggle();
         timeRecord.setDirection(lastShiftDirection);
       }
     }
 
-    // Build the time intervals
-    List<TimeInterval> timeIntervals = new ArrayList<>();
-    Iterator<Pair<TimeRecord, TimeRecord>> iterator = new TwoElementsIterator<>(timeRecords);
-
-    while (iterator.hasNext()) {
-      Pair<TimeRecord, TimeRecord> dateTimePair = iterator.next();
-      timeIntervals.add(new TimeInterval(dateTimePair.first, dateTimePair.second));
-
-      // @TODO Add the previousRegisteredRecordWasInDirected rule
-    }
-
-    return timeIntervals;
+    return orderedTimeRecords;
   }
 }

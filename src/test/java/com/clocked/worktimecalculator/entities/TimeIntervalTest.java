@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ class TimeIntervalTest {
   }
 
   @Test
-  void testCreateTimeIntervalException() {
+  void testCreateTimeIntervalValidations() {
     TimeRecord recordA =
         new TimeRecord(
             LocalDateTime.of(2023, 1, 1, 8, 0), TimeRecordType.REGISTERED, TimeRecordDirection.IN);
@@ -200,6 +201,7 @@ class TimeIntervalTest {
                 TimeRecordType.REGISTERED,
                 TimeRecordDirection.OUT));
     assertEquals(true, timeIntervalA.equals(timeIntervalB));
+    assertEquals(true, timeIntervalA.equals(timeIntervalA));
   }
 
   @Test
@@ -223,6 +225,8 @@ class TimeIntervalTest {
                 TimeRecordType.REGISTERED,
                 TimeRecordDirection.OUT));
     assertNotEquals(true, timeIntervalA.equals(timeIntervalB));
+    assertNotEquals(true, timeIntervalA.equals(LocalDate.of(2023, 1, 1)));
+    assertNotEquals(true, timeIntervalA.equals(null));
   }
 
   @Test

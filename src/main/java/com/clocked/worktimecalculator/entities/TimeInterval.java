@@ -97,7 +97,9 @@ public class TimeInterval {
     }
     TimeInterval otherTimeInterval = (TimeInterval) obj;
     return initialRecord.equals(otherTimeInterval.getInitialRecord())
-        && endRecord.equals(otherTimeInterval.getEndRecord());
+        && endRecord.equals(otherTimeInterval.getEndRecord())
+        && previousRegisteredRecordWasInDirected
+            == otherTimeInterval.previousRegisteredRecordWasInDirected;
   }
 
   @Override

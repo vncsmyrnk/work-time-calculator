@@ -45,7 +45,7 @@ class TimeIntervalBuilderTest {
           {
             add(new TimeInterval(timeRecords.get(0), timeRecords.get(1)));
             add(new TimeInterval(timeRecords.get(1), timeRecords.get(2)));
-            add(new TimeInterval(timeRecords.get(2), timeRecords.get(3)));
+            add(new TimeInterval(timeRecords.get(2), timeRecords.get(3), true));
           }
         };
 
@@ -109,12 +109,61 @@ class TimeIntervalBuilderTest {
         new ArrayList<>() {
           {
             add(new TimeInterval(allTimeRecords.get(0), allTimeRecords.get(1)));
-            add(new TimeInterval(allTimeRecords.get(1), allTimeRecords.get(2)));
-            add(new TimeInterval(allTimeRecords.get(2), allTimeRecords.get(3)));
+            add(new TimeInterval(allTimeRecords.get(1), allTimeRecords.get(2), true));
+            add(new TimeInterval(allTimeRecords.get(2), allTimeRecords.get(3), true));
             add(new TimeInterval(allTimeRecords.get(3), allTimeRecords.get(4)));
             add(new TimeInterval(allTimeRecords.get(4), allTimeRecords.get(5)));
-            add(new TimeInterval(allTimeRecords.get(5), allTimeRecords.get(6)));
-            add(new TimeInterval(allTimeRecords.get(6), allTimeRecords.get(7)));
+            add(new TimeInterval(allTimeRecords.get(5), allTimeRecords.get(6), true));
+            add(new TimeInterval(allTimeRecords.get(6), allTimeRecords.get(7), true));
+          }
+        };
+
+    List<TimeInterval> actual = TimeIntervalBuilder.of(dateTimes, dateTimesShift);
+    assertEquals(timeIntervalsExpected, actual);
+  }
+
+  @Test
+  void testAnotherTimeIntervalCreationByDateTimes() {
+    List<LocalDateTime> dateTimes =
+        new ArrayList<>() {
+          {
+            add(LocalDateTime.of(2023, 1, 1, 8, 0));
+            add(LocalDateTime.of(2023, 1, 1, 16, 0));
+          }
+        };
+
+    List<LocalDateTime> dateTimesShift =
+        new ArrayList<>() {
+          {
+            add(LocalDateTime.of(2023, 1, 1, 12, 0));
+            add(LocalDateTime.of(2023, 1, 1, 13, 0));
+          }
+        };
+
+    List<TimeRecord> allTimeRecords =
+        new ArrayList<>() {
+          {
+            add(
+                new TimeRecord(
+                    dateTimes.get(0), TimeRecordType.REGISTERED, TimeRecordDirection.IN));
+            add(
+                new TimeRecord(
+                    dateTimesShift.get(0), TimeRecordType.SHIFT, TimeRecordDirection.IN));
+            add(
+                new TimeRecord(
+                    dateTimesShift.get(1), TimeRecordType.SHIFT, TimeRecordDirection.OUT));
+            add(
+                new TimeRecord(
+                    dateTimes.get(1), TimeRecordType.REGISTERED, TimeRecordDirection.OUT));
+          }
+        };
+
+    List<TimeInterval> timeIntervalsExpected =
+        new ArrayList<>() {
+          {
+            add(new TimeInterval(allTimeRecords.get(0), allTimeRecords.get(1)));
+            add(new TimeInterval(allTimeRecords.get(1), allTimeRecords.get(2), true));
+            add(new TimeInterval(allTimeRecords.get(2), allTimeRecords.get(3), true));
           }
         };
 

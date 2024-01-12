@@ -11,6 +11,9 @@ public class Day {
   private List<TimeInterval> timeIntervals;
 
   public Day(LocalDate date, List<TimeInterval> timeIntervals) {
+    if (date == null || timeIntervals == null) {
+      throw new IllegalArgumentException("Date and Time Intervals must be non-null");
+    }
     this.date = date;
     this.calculations = new ArrayList<>();
     this.timeIntervals = timeIntervals;
@@ -35,7 +38,10 @@ public class Day {
   }
 
   public Calculation getCalculation(CalculationType type) {
-    return calculations.stream().filter(c -> c.getType() == type).findFirst().orElse(null);
+    return calculations.stream()
+        .filter(c -> c.getType() == type)
+        .findFirst()
+        .orElse(new Calculation(type, 0));
   }
 
   private void calculateHoursWorkTime() {
