@@ -33,13 +33,13 @@ public class TimeIntervalBuilder {
   private static List<TimeInterval> buildTimeIntervals(List<TimeRecord> orderedTimeRecords) {
     List<TimeInterval> timeIntervals = new ArrayList<>();
     Iterator<Pair<TimeRecord, TimeRecord>> iterator = new TwoElementsIterator<>(orderedTimeRecords);
-    boolean previousRegisteredRecordWasInDirected = false;
+    boolean workTimeIntervalOpenInAPreviousInterval = false;
 
     while (iterator.hasNext()) {
       Pair<TimeRecord, TimeRecord> dateTimePair = iterator.next();
       timeIntervals.add(
           new TimeInterval(
-              dateTimePair.first, dateTimePair.second, previousRegisteredRecordWasInDirected));
+              dateTimePair.first, dateTimePair.second, workTimeIntervalOpenInAPreviousInterval));
 
       boolean secondDateTimeIsRegisteredAndOut =
           dateTimePair.second.getType().isRegistered()
@@ -52,7 +52,7 @@ public class TimeIntervalBuilder {
 
       if (secondDateTimeIsRegisteredAndOut
           || firstDateTimeIsRegisteredAndOutAndSecondIsNotRegistered) {
-        previousRegisteredRecordWasInDirected = false;
+        workTimeIntervalOpenInAPreviousInterval = false;
         continue;
       }
 
@@ -66,7 +66,7 @@ public class TimeIntervalBuilder {
 
       if (secondDateTimeIsRegisteredAndIn
           || firstDateTimeIsRegisteredAndInAndSecondIsNotRegistered) {
-        previousRegisteredRecordWasInDirected = true;
+        workTimeIntervalOpenInAPreviousInterval = true;
       }
     }
 

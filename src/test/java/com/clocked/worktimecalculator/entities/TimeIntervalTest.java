@@ -21,8 +21,8 @@ class TimeIntervalTest {
 
     TimeInterval timeInterval = new TimeInterval(recordA, recordB);
     assertEquals(recordA, timeInterval.getInitialRecord());
-    assertEquals(recordB, timeInterval.getEndRecord());
-    assertEquals(false, timeInterval.getPreviousRegisteredRecordWasInDirected());
+    assertEquals(recordB, timeInterval.getFinalRecord());
+    assertEquals(false, timeInterval.getWorkTimeIntervalOpenInAPreviousInterval());
   }
 
   @Test
@@ -38,6 +38,22 @@ class TimeIntervalTest {
         IllegalArgumentException.class,
         () -> {
           new TimeInterval(recordB, recordA);
+        });
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> {
+          new TimeInterval(null, null);
+        });
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> {
+          new TimeInterval(recordA, null);
+        });
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> {
+          new TimeInterval(null, recordB);
         });
   }
 
@@ -240,7 +256,7 @@ class TimeIntervalTest {
                 TimeRecordType.REGISTERED,
                 TimeRecordDirection.IN));
     assertEquals(
-        Objects.hash(timeInterval.getInitialRecord(), timeInterval.getEndRecord()),
+        Objects.hash(timeInterval.getInitialRecord(), timeInterval.getFinalRecord()),
         timeInterval.hashCode());
   }
 }

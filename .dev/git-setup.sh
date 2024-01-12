@@ -14,6 +14,7 @@ apk add git openssh-keygen openssh-client
 git config --global user.name $name
 git config --global user.email $email
 git config --global --add safe.directory '*' # Fixing the dubious ownership issue
+git config --global pull.ff true
 
 echo "Generating SSH Keys..."
 ssh-keygen -t rsa -b 4096 -C $email

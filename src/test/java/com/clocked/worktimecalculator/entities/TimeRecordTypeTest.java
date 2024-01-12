@@ -23,6 +23,7 @@ class TimeRecordTypeTest {
     assertEquals(true, type.isNotRegistered());
   }
 
+  @Test
   void testIsShift() {
     TimeRecordType type = TimeRecordType.SHIFT;
     assertEquals(true, type.isShift());

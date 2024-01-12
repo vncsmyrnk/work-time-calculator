@@ -23,6 +23,9 @@ class DayTest {
 
   @Test
   void testCreateDayValidations() {
+    LocalDate date = LocalDate.of(2023, 1, 1);
+    List<TimeInterval> intervals = new ArrayList<>();
+
     assertThrows(
         IllegalArgumentException.class,
         () -> {
@@ -31,12 +34,12 @@ class DayTest {
     assertThrows(
         IllegalArgumentException.class,
         () -> {
-          new Day(LocalDate.of(2023, 1, 1), null);
+          new Day(date, null);
         });
     assertThrows(
         IllegalArgumentException.class,
         () -> {
-          new Day(null, new ArrayList<>());
+          new Day(null, intervals);
         });
   }
 

@@ -5,40 +5,43 @@ import java.util.Objects;
 
 public class TimeInterval {
   private TimeRecord initialRecord;
-  private TimeRecord endRecord;
-  private boolean previousRegisteredRecordWasInDirected;
+  private TimeRecord finalRecord;
+  private boolean workTimeIntervalOpenInAPreviousInterval;
 
-  public TimeInterval(TimeRecord initialRecord, TimeRecord endRecord) {
-    if (areRecordsValid(initialRecord, endRecord)) {
+  public TimeInterval(TimeRecord initialRecord, TimeRecord finalRecord) {
+    if (initialRecord == null || finalRecord == null) {
+      throw new IllegalArgumentException("Initial and final Time Records must be non-null");
+    }
+    if (areRecordsValid(initialRecord, finalRecord)) {
       throw new IllegalArgumentException("Initial date should be greater than the final");
     }
-    this.endRecord = endRecord;
+    this.finalRecord = finalRecord;
     this.initialRecord = initialRecord;
-    this.previousRegisteredRecordWasInDirected = false;
+    this.workTimeIntervalOpenInAPreviousInterval = false;
   }
 
   public TimeInterval(
       TimeRecord initialRecord,
-      TimeRecord endRecord,
-      boolean previousRegisteredRecordWasInDirected) {
-    this(initialRecord, endRecord);
-    this.previousRegisteredRecordWasInDirected = previousRegisteredRecordWasInDirected;
+      TimeRecord finalRecord,
+      boolean workTimeIntervalOpenInAPreviousInterval) {
+    this(initialRecord, finalRecord);
+    this.workTimeIntervalOpenInAPreviousInterval = workTimeIntervalOpenInAPreviousInterval;
   }
 
   public TimeRecord getInitialRecord() {
     return initialRecord;
   }
 
-  public TimeRecord getEndRecord() {
-    return endRecord;
+  public TimeRecord getFinalRecord() {
+    return finalRecord;
   }
 
-  public boolean getPreviousRegisteredRecordWasInDirected() {
-    return previousRegisteredRecordWasInDirected;
+  public boolean getWorkTimeIntervalOpenInAPreviousInterval() {
+    return workTimeIntervalOpenInAPreviousInterval;
   }
 
   public double durationInSeconds() {
-    return ChronoUnit.SECONDS.between(initialRecord.getDateTime(), endRecord.getDateTime());
+    return ChronoUnit.SECONDS.between(initialRecord.getDateTime(), finalRecord.getDateTime());
   }
 
   public double durationInHours() {
@@ -53,8 +56,8 @@ public class TimeInterval {
     TimeRecordType initialRecordType = initialRecord.getType();
     TimeRecordDirection initialRecordDirection = initialRecord.getDirection();
 
-    TimeRecordType endRecordType = endRecord.getType();
-    TimeRecordDirection endRecordDirection = endRecord.getDirection();
+    TimeRecordType finalRecordType = finalRecord.getType();
+    TimeRecordDirection finalRecordDirection = finalRecord.getDirection();
 
     // if the initial record is registered in by the worker then the whole interval
     // is a work interval
@@ -65,16 +68,16 @@ public class TimeInterval {
 
     // if the end record is registered out by the worker then the whole interval
     // is a work interval
-    if (endRecordType == TimeRecordType.REGISTERED
-        && endRecordDirection == TimeRecordDirection.OUT) {
+    if (finalRecordType == TimeRecordType.REGISTERED
+        && finalRecordDirection == TimeRecordDirection.OUT) {
       return TimeIntervalType.WORK;
     }
 
     // if the interval begins and ends with shift records it may be a work interval
     // only if there are any work record before the current interval
     if (initialRecordType == TimeRecordType.SHIFT
-        && endRecordType == TimeRecordType.SHIFT
-        && previousRegisteredRecordWasInDirected) {
+        && finalRecordType == TimeRecordType.SHIFT
+        && workTimeIntervalOpenInAPreviousInterval) {
       return TimeIntervalType.WORK;
     }
 
@@ -82,8 +85,8 @@ public class TimeInterval {
     return TimeIntervalType.ABSENT;
   }
 
-  private boolean areRecordsValid(TimeRecord initialRecord, TimeRecord endRecord) {
-    return endRecord.getDateTime().isBefore(initialRecord.getDateTime());
+  private boolean areRecordsValid(TimeRecord initialRecord, TimeRecord finalRecord) {
+    return finalRecord.getDateTime().isBefore(initialRecord.getDateTime());
   }
 
   @Override
@@ -97,13 +100,13 @@ public class TimeInterval {
     }
     TimeInterval otherTimeInterval = (TimeInterval) obj;
     return initialRecord.equals(otherTimeInterval.getInitialRecord())
-        && endRecord.equals(otherTimeInterval.getEndRecord())
-        && previousRegisteredRecordWasInDirected
-            == otherTimeInterval.previousRegisteredRecordWasInDirected;
+        && finalRecord.equals(otherTimeInterval.getFinalRecord())
+        && workTimeIntervalOpenInAPreviousInterval
+            == otherTimeInterval.workTimeIntervalOpenInAPreviousInterval;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(initialRecord, endRecord);
+    return Objects.hash(initialRecord, finalRecord);
   }
 }
