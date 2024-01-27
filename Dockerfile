@@ -19,6 +19,7 @@ COPY --from=base /var/app .
 RUN ./gradlew bootJar
 
 # Stage 3: Optimized deploy-ready image
+LABEL org.opencontainers.image.source=https://github.com/vncsmyrnk/work-time-calculator
 FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /var/app/
 COPY --from=build /var/app/build/libs/app.jar .
