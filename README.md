@@ -43,4 +43,4 @@ A SonarCloud action is used to check for vulnerabilities and static analysis.
 
 ## Deployment
 
-As soon as possible releases will to be avaiable and the docker images containing the production-ready code will be deployed to dockerhub.
+The release automated workflow publishes the docker images on [Docker Hub](https://hub.docker.com/r/clockedwtc/wtc/tags) and GitHub Container Registry.
