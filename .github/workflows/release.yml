@@ -28,7 +28,8 @@ jobs:
           release_name: Release ${{ github.ref }}
           body: |
             ${{ steps.github_release.outputs.changelog }}
-            Available on: https://hub.docker.com/r/clockedwtc/wtc
+
+            Image available on: https://hub.docker.com/r/clockedwtc/wtc
           draft: false
           prerelease: false
 
@@ -49,4 +50,4 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: user/app:latest
+          tags: clockedwtc/wtc:${{ github.ref }}
