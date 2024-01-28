@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  packages: write
 
 jobs:
   release:
@@ -27,6 +28,8 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           body: |
+            ## Changelog
+
             ${{ steps.github_release.outputs.changelog }}
 
             Image available on: https://hub.docker.com/r/clockedwtc/wtc
