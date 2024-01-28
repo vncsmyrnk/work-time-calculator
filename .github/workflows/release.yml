@@ -63,3 +63,5 @@ jobs:
           tags: |
             clockedwtc/wtc:latest
             clockedwtc/wtc:${{ github.ref_name }}
+            ghcr.io/vncsmyrnk/latest:latest
+            ghcr.io/vncsmyrnk/latest:${{ github.ref_name }}
