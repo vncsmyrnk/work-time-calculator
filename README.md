@@ -43,4 +43,12 @@ A SonarCloud action is used to check for vulnerabilities and static analysis.
 
 ## Deployment
 
-The release automated workflow publishes the docker images on [Docker Hub](https://hub.docker.com/r/clockedwtc/wtc/tags) and GitHub Container Registry.
+The release automated workflow publishes the docker images on [Docker Hub](https://hub.docker.com/r/clockedwtc/wtc/tags) and [GitHub Container Registry](https://github.com/vncsmyrnk/work-time-calculator/pkgs/container/wtc).
+
+After pulling the images from the most appropriate location, execute one of the following commands to run the image:
+
+```bash
+docker run --rm -p {PORT}:8080 ghcr.io/vncsmyrnk/wtc:{VERSION} # or
+docker run --rm -p {PORT}:8080 clockedwtc/wtc:{VERSION}
+
+```
