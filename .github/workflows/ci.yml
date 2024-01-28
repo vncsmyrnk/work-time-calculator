@@ -21,7 +21,9 @@ jobs:
         run: ./gradlew bootJar | tee build.log
 
       - name: Collect output artifacts
-        run: GITHUB_STEP_SUMMARY=$(cat build.log | tail -n 2)
+        run: |
+          echo "### Build output" >> $GITHUB_STEP_SUMMARY
+          echo "$(cat build.log | tail -n 2)" >> $GITHUB_STEP_SUMMARY
 
   sonar-static-analysis:
     runs-on: ubuntu-latest
