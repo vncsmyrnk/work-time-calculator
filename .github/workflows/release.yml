@@ -64,7 +64,7 @@ jobs:
         with:
           push: true
           build-args: |
-            WTC_VERSION=${{ github.ref_name }}
+            "WTC_VERSION=${{ github.ref_name }}"
           tags: |
             clockedwtc/wtc:latest
             clockedwtc/wtc:${{ github.ref_name }}
