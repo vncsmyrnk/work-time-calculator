@@ -21,6 +21,8 @@ RUN ./gradlew bootJar
 # Stage 3: Optimized deploy-ready image
 LABEL org.opencontainers.image.source=https://github.com/vncsmyrnk/work-time-calculator
 FROM eclipse-temurin:21-jdk-alpine
+ARG WTC_VERSION=v0.0.0
+ENV WTC_VERSION=${WTC_VERSION}
 WORKDIR /var/app/
 COPY --from=build /var/app/build/libs/app.jar .
 EXPOSE 8080

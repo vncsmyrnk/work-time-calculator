@@ -63,6 +63,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
+          build-args: |
+            WTC_VERSION=${{ github.ref_name }}
           tags: |
             clockedwtc/wtc:latest
             clockedwtc/wtc:${{ github.ref_name }}
