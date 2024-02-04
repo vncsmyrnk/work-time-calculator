@@ -8,6 +8,8 @@
 <br>
 <br>
 
+*Attention!* This project was moved to https://github.com/clocked-app/calculations-api.
+
 This is an app built with Spring Boot and Gradle to calculate work time for a given parameter inputs.
 
 Docker is used to handle the environments.
